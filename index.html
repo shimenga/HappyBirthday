@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Happy Birthday!</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+
+
+{ margin: 0; padding: 0; box-sizing: border-box }
+
+body, html { width: 100%; height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif }
+
+#particles-js { position: absolute; width: 100%; height: 100%; z-index: 1; top: 0; left: 0 }
+
+.content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; z-index: 2; color: #000 }
+
+#message { font-family: 'Great Vibes', cursive; font-size: 5rem }
+
+#confetti-btn { margin-top: 20px; padding: 15px 30px; font-size: 1.2rem; font-weight: 600; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 0 10px rgba(0,0,0,0.3); transition: transform .2s; background-color: #FF5F7E; color: #fff }
+
+#confetti-btn:hover { transform: scale(1.1) }
+
+#confetti-canvas { position: absolute; pointer-events: none; width: 100%; height: 100%; top: 0; left: 0; z-index: 3 }
+
+.balloon { position: absolute; bottom: -100px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; opacity: 0.8 }
+
+</style>
+
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<div class="content">
+
+<h1 id="message">Happy Birthday!</h1>
+
+<button id="confetti-btn">Click for Surprise</button>
+
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.3.3/tsparticles.bundle.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+<script>
+
+tsParticles.load("particles-js", {
+
+background: {
+
+color: "#ffffff"
+
+},
+
+particles: {
+
+number: { value: 80 },
+
+color: { value: ["#FF5F7E", "#FFCC4D", "#45E994", "#5CC2F3"] },
+
+shape: { type: "circle" },
+
+opacity: { value: 0.7 },
+
+size: { value: { min: 3, max: 7 } },
+
+move: { enable: true, speed: 2, direction: "none", outModes: "out" }
+
+},
+
+interactivity: {
+
+events: {
+
+onHover: { enable: true, mode: "repulse" },
+
+onClick: { enable: true, mode: "push" }
+
+},
+
+modes: { repulse: { distance: 100 }, push: { quantity: 4 } }
+
+},
+
+detectRetina: true
+
+})
+
+gsap.from("#message", { scale: 0, opacity: 0, duration: 1.5, ease: "bounce" })
+
+gsap.from("#confetti-btn", { y: 50, opacity: 0, duration: 1, delay: 1 })
+
+const confettiCanvas = document.getElementById("confetti-canvas")
+
+const myConfetti = confetti.create(confettiCanvas, { resize: true, useWorker: true })
+
+document.getElementById("confetti-btn").addEventListener("click", () => {
+
+myConfetti({
+
+particleCount: 300,
+
+spread: 180,
+
+colors: ['#FF5F7E', '#FFCC4D', '#45E994', '#5CC2F3']
+
+});
+
+const message = document.getElementById("message");
+
+const newMessage = "生日快乐，天天开心！";
+
+gsap.to(message, { opacity: 0, scale: 0, rotation: 360, duration: 0.5, onComplete: () => {
+
+message.textContent = newMessage;
+
+gsap.fromTo(message, { opacity: 0, scale: 0, rotation: -360 }, { opacity: 1, scale: 1, rotation: 0, duration: 1, ease: "bounce" });
+
+}});
+
+})
+
+function createBalloon() {
+
+const b = document.createElement("div")
+
+b.classList.add("balloon")
+
+const size = Math.random() * 60 + 40
+
+b.style.width = size + "px";
+
+b.style.height = size * 1.2 + "px"
+
+b.style.left = Math.random() * 100 + "vw"
+
+b.style.background = 'hsl(${Math.random() * 360}, 70%, 60%)'
+
+document.body.appendChild(b)
+
+const duration = Math.random() * 5 + 5;
+
+gsap.to(b, {
+
+y: - (window.innerHeight + size * 1.2),
+
+x: gsap.utils.random(-50, 50),
+
+rotation: gsap.utils.random(-20, 20),
+
+duration: duration,
+
+ease: "none",
+
+onComplete: () => b.remove()
+
+});
+
+}
+
+setInterval(createBalloon, 500)
+
+</script>
+
+</body>
+
+</html>
